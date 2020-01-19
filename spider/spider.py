@@ -65,8 +65,8 @@ def save_to_es(url, token, webpage_html):
         'html': webpage_html,
         'timestamp': datetime.now(),
     }
-    res = es.index(index="webpage", doc_type='webpage', body=doc)
-    es.indices.refresh(index="webpage")
+    res = es.index(index="report", doc_type='report', body=doc)
+    es.indices.refresh(index="report")
 
 
 def fetch_webpage(url, token):
@@ -82,10 +82,10 @@ def consume_message(data):
     if not isinstance(data, dict) or 'url' not in data or 'token' not in data:
         raise ValueError('Invalid message format!')
 
-    # try:
-    fetch_webpage(data['url'], data['token'])
-    # except Exception as e:
-    #    print(f"Unexpected error when fetching a webpage. {str(e)}")
+    try:
+        fetch_webpage(data['url'], data['token'])
+    except Exception as e:
+        print(f"Unexpected error when fetching a webpage. {str(e)}")
 
 
 if __name__ == '__main__':
@@ -109,9 +109,9 @@ if __name__ == '__main__':
 
             for tp, messages in msg_pack.items():
                 for message in messages:
-                    # try:
-                    consume_message(message.value)
-                    # except Exception as e:
-                    #    print(f'Error while consuming the message. {str(e)}')
+                    try:
+                        consume_message(message.value)
+                    except Exception as e:
+                        print(f'Error while consuming the message. {str(e)}')
     finally:
         consumer.close()

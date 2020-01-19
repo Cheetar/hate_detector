@@ -38,7 +38,6 @@ def save_to_es(url, report):
 def get_report(webpage_html):
     sonar = Sonar()
     report = sonar.ping(text=webpage_html)
-    # del report["text"]
     return report
 
 
@@ -51,7 +50,6 @@ def review_webpage(url, webpage_html):
     print("Reviewing webpage {}...".format(url))
 
     report = get_report(webpage_html)
-    print(report, flush=True)
     save_to_es(url, report)
     save_to_redis(url, report)
 

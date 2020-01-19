@@ -23,20 +23,12 @@ services:
       - "spider"
       - "redis"
       - "es"
-      - "postgres"
      healthcheck:
         test: ["CMD", "curl", "-f", "http://app:8000"]
         interval: 1m30s
         timeout: 10s
         retries: 3
         start_period: 40s
-     #environment:
-   #     - ADMIN_USERNAME: ${ADMIN_USERNAME}
-   #     - ADMIN_PASSWORD: ${ADMIN_PASSWORD}
-   #     - DOCKER_HOST_IP: ${DOCKER_HOST_IP}
-   #     - FLASK_DEBUG: ${FLASK_DEBUG}
-   #     - FLASK_SECRET_KEY: ${FLASK_SECRET_KEY}
-   #     - SENTRY_DNS: ${ADMIN_USERNAME}
      ports:
        - 80:8000
 
@@ -62,15 +54,6 @@ services:
       - "es"
      restart: always
 
-   postgres:
-     image: "postgres:latest"
-     container_name: hd_postgres
-     environment:
-       - POSTGRES_PASSWORD=postgres
-       - POSTGRES_DB=hd
-     volumes:
-       - postgres:/var/lib/postgresql/
-
    redis:
      image: redis:latest
      container_name: hd_redis
@@ -85,6 +68,3 @@ services:
        - 9300:9300
      environment:
          - discovery.type=single-node
-
-volumes:
-   postgres:

@@ -139,27 +139,14 @@ def check():
         abort(404)
 
     page_info = None
-    # Check if record is in redis or in Elasticsearch:
+    # Check if record is in redis:
     try:
         page_info = r.get(url)
-        if page_info is not None:
-            print("Webpage in Redis.", flush=True)
     except Exception as e:
         print("Error while accessing redis.", flush=True)
 
-    if page_info is None:
-        try:
-            s = Search(index="report").using(es).query("match", url=url)
-            res = s.execute()
-            print("No. of total hits: " + str(res.hits.total.value), flush=True)
-            if res.hits.total.value > 0:
-                report = res.to_dict()["hits"]["hits"][0]["_source"]["report"]
-                page_info = {url: report}
-        except NotFoundError as e:
-            print("Index does not exist yet.", flush=True)
-
     if page_info is not None:
-        return render_template("check.html", page_info=page_info)
+        return render_template("check.html", page_info=page_info, url=url)
 
     # Request spider to fetch the webpage
     token = generate_token()
