@@ -1,1 +1,2 @@
-# hate_detector
+# pptk
+PowerPoint Karaoke Slides based on microservices architecture
